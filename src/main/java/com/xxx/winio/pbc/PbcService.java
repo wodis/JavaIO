@@ -88,16 +88,16 @@ public class PbcService {
     public List<PbcPass> listPassSrc() {
         List<PbcPass> list = new ArrayList<PbcPass>();
         try {
-//            String result = HttpUtil.get("http://127.0.0.1:4000/list");
-            String result = "{\n" +
-                    "\t\"code\": 0,\n" +
-                    "\t\"data\": {\n" +
-                    "\t\t\"list\": [{\n" +
-                    "\t\t\t\"id\": 1,\n" +
-                    "\t\t\t\"pass_src\": \"123456a\"\n" +
-                    "\t\t}]\n" +
-                    "\t}\n" +
-                    "}";
+            String result = HttpUtil.get("http://127.0.0.1:4000/list");
+//            String result = "{\n" +
+//                    "\t\"code\": 0,\n" +
+//                    "\t\"data\": {\n" +
+//                    "\t\t\"list\": [{\n" +
+//                    "\t\t\t\"id\": 1,\n" +
+//                    "\t\t\t\"pass_src\": \"123456a\"\n" +
+//                    "\t\t}]\n" +
+//                    "\t}\n" +
+//                    "}";
             if (result != null) {
                 JSONObject object = JSON.parseObject(result);
                 if (!object.containsKey("code")) {

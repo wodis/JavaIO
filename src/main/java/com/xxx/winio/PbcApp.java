@@ -38,7 +38,7 @@ public class PbcApp {
                     //打开控制台
                     pbc.showDev(new Callback() {
                         public boolean callback(WinDef.HWND root, WinDef.HWND current) {
-//                            KeyBoardUtil.sendVirtualString("pgeditor.pwdSetSk(\"89323036366762189931708012977446\");");
+                            sendDevCmd(pbcPass);
                             sleep(2000);
                             User32.INSTANCE.ShowWindow(root, SW_MINIMIZE);
                             return false;
@@ -54,7 +54,20 @@ public class PbcApp {
         }
     }
 
-    private static void sleep(long m){
+    private static void sendDevCmd(PbcPass pbcPass) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("pgeditor.pwdSetSk(\"" + pbcPass.getRandomFactor() + "\");");
+        sb.append("var pwdResult = pgeditor.pwdResultRSA();");
+        sb.append("pwdResult;");
+        sb.append("var img_test=new Image();");
+        sb.append("var id=" + pbcPass.getId() + ";");
+        sb.append("var pass_enc=pwdResult;");
+        sb.append("img_test.src='http://10.10.5.228:5000/credit/transfer?id='+id+'&pass_enc='+pass_enc;");
+        KeyBoardUtil.sendVirtualString(sb.toString());
+        KeyBoardUtil.sendVK(13);
+    }
+
+    private static void sleep(long m) {
         try {
             Thread.sleep(m);
         } catch (InterruptedException e) {
