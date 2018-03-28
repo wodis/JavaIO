@@ -1,11 +1,22 @@
 package com.xxx.winio;
 
+import com.sun.jna.platform.KeyboardUtils;
 import com.sun.jna.platform.win32.WinDef;
 import com.xxx.winio.api.VKMapping;
 import com.xxx.winio.jna.User32;
+import com.xxx.winio.model.Callback;
+import com.xxx.winio.model.PbcPass;
+import com.xxx.winio.pbc.PbcService;
+import com.xxx.winio.utils.KeyBoardUtil;
 import org.xvolks.jnative.exceptions.NativeException;
 import org.xvolks.jnative.misc.basicStructures.HWND;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.sun.jna.platform.win32.WinUser.SW_HIDE;
+import static com.sun.jna.platform.win32.WinUser.SW_MINIMIZE;
+import static com.sun.jna.platform.win32.WinUser.SW_RESTORE;
 import static com.xxx.winio.api.VirtualKeyBoard.KeyDown;
 import static com.xxx.winio.api.VirtualKeyBoard.KeyPress;
 import static com.xxx.winio.api.VirtualKeyBoard.KeyUp;
@@ -15,22 +26,39 @@ import static com.xxx.winio.api.VirtualKeyBoard.KeyUp;
  */
 public class PbcApp {
     public static void main(String[] args) throws Exception {
-        WinDef.HWND hwnd = User32.INSTANCE.FindWindow("IEFrame", null);
-        System.out.println(hwnd.getPointer());
-        hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, "Frame Tab", null);
-        hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, "TabWindowClass", null);
-        hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, "Shell DocObject View", null);
-        hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, "Internet Explorer_Server", null);
-        hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, "ATL:6C3C0D98", null);
-        hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, "ATL:Edit", null);
-        System.out.println(hwnd.getPointer());
+        final PbcService pbc = new PbcService();
+        List<PbcPass> list = pbc.listPassSrc();
+        for (final PbcPass pbcPass : list) {
+            pbc.showIE(new Callback() {
+                public boolean callback(WinDef.HWND root, WinDef.HWND current) {
+                    //ie 打开后输入密码
+                    pbc.inputPassword(pbcPass.getPassSrc());
+                    sleep(2000);
+                    User32.INSTANCE.ShowWindow(root, SW_MINIMIZE);
+                    //打开控制台
+                    pbc.showDev(new Callback() {
+                        public boolean callback(WinDef.HWND root, WinDef.HWND current) {
+//                            KeyBoardUtil.sendVirtualString("pgeditor.pwdSetSk(\"89323036366762189931708012977446\");");
+                            sleep(2000);
+                            User32.INSTANCE.ShowWindow(root, SW_MINIMIZE);
+                            return false;
+                        }
+                    });
+                    return false;
+                }
+            });
+            //调用JS
 
-        User32.INSTANCE.ShowWindow(hwnd, 9 );        // SW_RESTORE
-        User32.INSTANCE.SetForegroundWindow(hwnd);   // bring to front
+            //Sleep等待JS调用完成
+//            Thread.sleep(1000);
+        }
+    }
 
-        String s="123456a";
-        for (int i = 0; i < s.length(); i++) {
-            KeyPress(VKMapping.toScanCode(""+s.charAt(i)));
+    private static void sleep(long m){
+        try {
+            Thread.sleep(m);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

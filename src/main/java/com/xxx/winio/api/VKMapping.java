@@ -52,6 +52,7 @@ public class VKMapping {
 		map.put("Shift", KeyEvent.VK_SHIFT);
 		map.put("Cntl", KeyEvent.VK_CONTROL);
 		map.put("Alt", KeyEvent.VK_ALT);
+		map.put("Backspace", KeyEvent.VK_BACK_SPACE);
 		map.put("F1",KeyEvent.VK_F1);
 		map.put("F2",KeyEvent.VK_F2);
 		map.put("F3",KeyEvent.VK_F3);
