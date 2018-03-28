@@ -10,6 +10,7 @@ import com.xxx.winio.model.Callback;
 import com.xxx.winio.model.PbcPass;
 import com.xxx.winio.network.HttpUtil;
 import com.xxx.winio.utils.KeyBoardUtil;
+import com.xxx.winio.utils.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class PbcService {
     private final static String DEV_EDIT = "5031e";
 
     public void showIE(final Callback callback) {
+        Logger.i("Start IE Window");
         WinDef.HWND hwnd = User32.INSTANCE.FindWindow("IEFrame", null);
         final WinDef.HWND root = hwnd;
         User32.INSTANCE.ShowWindow(hwnd, SW_RESTORE);
@@ -32,14 +34,14 @@ public class PbcService {
         hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, "Internet Explorer_Server", null);
         hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, null, null);
 //        hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, "ATL:Edit", null);
-        System.out.println(hwnd.getPointer());
 
         User32.INSTANCE.EnumChildWindows(hwnd, new WinUser.WNDENUMPROC() {
             public boolean callback(WinDef.HWND hWnd, Pointer data) {
-                if (hWnd.getPointer().toString().contains(IE_EDIT)){
+                if (hWnd.getPointer().toString().contains(IE_EDIT)) {
+                    Logger.i("Found Out IE Window :" + hWnd.getPointer());
                     User32.INSTANCE.ShowWindow(hWnd, SW_NORMAL);        // SW_RESTORE
                     User32.INSTANCE.SetForegroundWindow(hWnd);   // bring to front
-                    if (callback != null){
+                    if (callback != null) {
                         callback.callback(root, hWnd);
                     }
                     return false;
@@ -49,8 +51,8 @@ public class PbcService {
         }, null);
     }
 
-    public void showDev(final Callback callback){
-        System.out.println("dev");
+    public void showDev(final Callback callback) {
+        Logger.i("Start IE Development Tools");
         WinDef.HWND hwnd = User32.INSTANCE.FindWindow("IEDEVTOOLS", null);
         final WinDef.HWND root = hwnd;
         User32.INSTANCE.ShowWindow(hwnd, SW_RESTORE);        // SW_RESTORE
@@ -61,12 +63,12 @@ public class PbcService {
 
         User32.INSTANCE.EnumChildWindows(hwnd, new WinUser.WNDENUMPROC() {
             public boolean callback(WinDef.HWND hWnd, Pointer data) {
-                if (hWnd.getPointer().toString().contains(DEV_EDIT)){
-                    System.out.println(hWnd.getPointer());
+                if (hWnd.getPointer().toString().contains(DEV_EDIT)) {
+                    Logger.i("Found Out IE Dev Window :" + hWnd.getPointer());
                     User32.INSTANCE.SetFocus(hWnd);
                     User32.INSTANCE.ShowWindow(hWnd, SW_NORMAL);        // SW_RESTORE
                     User32.INSTANCE.SetForegroundWindow(hWnd);   // bring to front
-                    if (callback != null){
+                    if (callback != null) {
                         callback.callback(root, hWnd);
                     }
                     return false;
@@ -77,6 +79,7 @@ public class PbcService {
     }
 
     public void inputPassword(String s) {
+        Logger.i("Input Password :" + s);
         try {
             KeyBoardUtil.delete(20);
             KeyBoardUtil.sendString(s);
@@ -89,15 +92,6 @@ public class PbcService {
         List<PbcPass> list = new ArrayList<PbcPass>();
         try {
             String result = HttpUtil.get("https://localhost/credit/list");
-//            String result = "{\n" +
-//                    "\t\"code\": 0,\n" +
-//                    "\t\"data\": {\n" +
-//                    "\t\t\"list\": [{\n" +
-//                    "\t\t\t\"id\": 1,\n" +
-//                    "\t\t\t\"pass_src\": \"123456a\"\n" +
-//                    "\t\t}]\n" +
-//                    "\t}\n" +
-//                    "}";
             if (result != null) {
                 JSONObject object = JSON.parseObject(result);
                 if (!object.containsKey("code")) {
@@ -111,18 +105,17 @@ public class PbcService {
                     List<PbcPass> array = JSON.parseArray(data, PbcPass.class);
                     list.addAll(array);
                 } else {
-                    System.err.println("异常code:" + code);
+                    Logger.e("异常code:" + code);
                 }
             }
         } catch (Exception e) {
-//            e.printStackTrace();
-            System.err.println(e.getMessage());
+            Logger.e(e.getMessage());
         }
         return list;
     }
 
     public static void main(String[] args) {
-//        final PbcService pbcService = new PbcService();
-//        pbcService.showDev(null);
+        final PbcService pbcService = new PbcService();
+        pbcService.showDev(null);
     }
 }

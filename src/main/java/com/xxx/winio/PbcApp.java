@@ -8,6 +8,7 @@ import com.xxx.winio.model.Callback;
 import com.xxx.winio.model.PbcPass;
 import com.xxx.winio.pbc.PbcService;
 import com.xxx.winio.utils.KeyBoardUtil;
+import com.xxx.winio.utils.Logger;
 import org.xvolks.jnative.exceptions.NativeException;
 import org.xvolks.jnative.misc.basicStructures.HWND;
 
@@ -35,9 +36,9 @@ public class PbcApp {
                 sleepTimes = 0;
             } else {
                 sleepTimes ++;
-                System.out.println("no data...");
+                Logger.i("No Data...");
                 if (sleepTimes < 6){
-                    sleep(10000);
+                    sleep(sleepTimes * 1000);
                 } else {
                     sleep(30000);
                     sleepTimes = 0;
@@ -51,6 +52,7 @@ public class PbcApp {
             pbc.showIE(new Callback() {
                 public boolean callback(WinDef.HWND root, WinDef.HWND current) {
                     //ie 打开后输入密码
+                    sleep(1000);
                     pbc.inputPassword(pbcPass.getPassSrc());
                     sleep(2000);
                     User32.INSTANCE.ShowWindow(root, SW_MINIMIZE);
@@ -60,7 +62,7 @@ public class PbcApp {
                             //调用JS
                             sendDevCmd(pbcPass);
                             //Sleep等待JS调用完成
-                            sleep(2000);
+                            sleep(500);
                             User32.INSTANCE.ShowWindow(root, SW_MINIMIZE);
                             return false;
                         }
