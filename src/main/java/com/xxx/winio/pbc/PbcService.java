@@ -115,7 +115,8 @@ public class PbcService {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
         return list;
     }

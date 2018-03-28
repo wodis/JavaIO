@@ -27,7 +27,18 @@ import static com.xxx.winio.api.VirtualKeyBoard.KeyUp;
 public class PbcApp {
     public static void main(String[] args) throws Exception {
         final PbcService pbc = new PbcService();
-        List<PbcPass> list = pbc.listPassSrc();
+        while (true){
+            List<PbcPass> list = pbc.listPassSrc();
+            if (list.size() > 0){
+                loop(pbc, list);
+            } else {
+                System.out.println("no data...");
+                sleep(10000);
+            }
+        }
+    }
+
+    private static void loop(final PbcService pbc , List<PbcPass> list){
         for (final PbcPass pbcPass : list) {
             pbc.showIE(new Callback() {
                 public boolean callback(WinDef.HWND root, WinDef.HWND current) {
