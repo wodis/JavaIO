@@ -88,7 +88,7 @@ public class PbcService {
     public List<PbcPass> listPassSrc() {
         List<PbcPass> list = new ArrayList<PbcPass>();
         try {
-            String result = HttpUtil.get("http://127.0.0.1:4000/list");
+            String result = HttpUtil.get("http://10.10.5.228:5000/credit/list");
 //            String result = "{\n" +
 //                    "\t\"code\": 0,\n" +
 //                    "\t\"data\": {\n" +
