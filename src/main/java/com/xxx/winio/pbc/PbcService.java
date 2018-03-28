@@ -18,8 +18,8 @@ import java.util.List;
 import static com.sun.jna.platform.win32.WinUser.*;
 
 public class PbcService {
-    private final static String IE_EDIT = "240524";
-    private final static String DEV_EDIT = "40374";
+    private final static String IE_EDIT = "603f2";
+    private final static String DEV_EDIT = "5031e";
 
     public void showIE(final Callback callback) {
         WinDef.HWND hwnd = User32.INSTANCE.FindWindow("IEFrame", null);
@@ -88,7 +88,7 @@ public class PbcService {
     public List<PbcPass> listPassSrc() {
         List<PbcPass> list = new ArrayList<PbcPass>();
         try {
-            String result = HttpUtil.get("http://10.10.5.228:5000/credit/list");
+            String result = HttpUtil.get("http://10.10.3.57:5000/credit/list");
 //            String result = "{\n" +
 //                    "\t\"code\": 0,\n" +
 //                    "\t\"data\": {\n" +

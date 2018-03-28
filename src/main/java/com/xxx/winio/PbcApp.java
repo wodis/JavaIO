@@ -38,7 +38,9 @@ public class PbcApp {
                     //打开控制台
                     pbc.showDev(new Callback() {
                         public boolean callback(WinDef.HWND root, WinDef.HWND current) {
+                            //调用JS
                             sendDevCmd(pbcPass);
+                            //Sleep等待JS调用完成
                             sleep(2000);
                             User32.INSTANCE.ShowWindow(root, SW_MINIMIZE);
                             return false;
@@ -47,10 +49,6 @@ public class PbcApp {
                     return false;
                 }
             });
-            //调用JS
-
-            //Sleep等待JS调用完成
-//            Thread.sleep(1000);
         }
     }
 
@@ -59,11 +57,20 @@ public class PbcApp {
         sb.append("pgeditor.pwdSetSk(\"" + pbcPass.getRandomFactor() + "\");");
         sb.append("var pwdResult = pgeditor.pwdResultRSA();");
         sb.append("pwdResult;");
+        KeyBoardUtil.sendVirtualString(sb.toString());
+        KeyBoardUtil.sendVK(13);
+
+        sb = new StringBuilder();
         sb.append("var img_test=new Image();");
+        KeyBoardUtil.sendVirtualString(sb.toString());
+        KeyBoardUtil.sendVK(13);
+
+        sb = new StringBuilder();
         sb.append("var id=" + pbcPass.getId() + ";");
         sb.append("var pass_enc=pwdResult;");
-        sb.append("img_test.src='http://10.10.5.228:5000/credit/transfer?id='+id+'&pass_enc='+pass_enc;");
         KeyBoardUtil.sendVirtualString(sb.toString());
+        KeyBoardUtil.sendVK(13);
+        KeyBoardUtil.sendVirtualString("img_test.src='https://10.10.3.57:5000/credit/transfer?id='+id+'&pass_enc='+pass_enc;");
         KeyBoardUtil.sendVK(13);
     }
 
