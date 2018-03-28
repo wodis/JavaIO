@@ -26,14 +26,22 @@ import static com.xxx.winio.api.VirtualKeyBoard.KeyUp;
  */
 public class PbcApp {
     public static void main(String[] args) throws Exception {
+        int sleepTimes = 0;
         final PbcService pbc = new PbcService();
         while (true){
             List<PbcPass> list = pbc.listPassSrc();
             if (list.size() > 0){
                 loop(pbc, list);
+                sleepTimes = 0;
             } else {
+                sleepTimes ++;
                 System.out.println("no data...");
-                sleep(10000);
+                if (sleepTimes < 6){
+                    sleep(10000);
+                } else {
+                    sleep(30000);
+                    sleepTimes = 0;
+                }
             }
         }
     }
@@ -81,7 +89,7 @@ public class PbcApp {
         sb.append("var pass_enc=pwdResult;");
         KeyBoardUtil.sendVirtualString(sb.toString());
         KeyBoardUtil.sendVK(13);
-        KeyBoardUtil.sendVirtualString("img_test.src='https://10.10.3.57:5000/credit/transfer?id='+id+'&pass_enc='+pass_enc;");
+        KeyBoardUtil.sendVirtualString("img_test.src='https://localhost/credit/transfer?id='+id+'&pass_enc='+pass_enc;");
         KeyBoardUtil.sendVK(13);
     }
 

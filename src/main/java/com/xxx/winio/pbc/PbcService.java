@@ -18,7 +18,7 @@ import java.util.List;
 import static com.sun.jna.platform.win32.WinUser.*;
 
 public class PbcService {
-    private final static String IE_EDIT = "603f2";
+    private final static String IE_EDIT = "51f88";
     private final static String DEV_EDIT = "5031e";
 
     public void showIE(final Callback callback) {
@@ -88,7 +88,7 @@ public class PbcService {
     public List<PbcPass> listPassSrc() {
         List<PbcPass> list = new ArrayList<PbcPass>();
         try {
-            String result = HttpUtil.get("http://10.10.3.57:5000/credit/list");
+            String result = HttpUtil.get("https://localhost/credit/list");
 //            String result = "{\n" +
 //                    "\t\"code\": 0,\n" +
 //                    "\t\"data\": {\n" +
