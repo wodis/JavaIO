@@ -23,6 +23,7 @@ public class KeyBoardUtil {
 
     public static void sendString(String string) throws Exception {
         for (int i = 0; i < string.length(); i++) {
+            sleep(100);
             char c = string.charAt(i);
             if (Character.isDigit(c)) {
                 pressLowerCase(c);
@@ -31,6 +32,14 @@ public class KeyBoardUtil {
             } else {
                 pressLowerCase(c);
             }
+        }
+    }
+
+    private static void sleep(long m) {
+        try {
+            Thread.sleep(m);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -49,9 +58,13 @@ public class KeyBoardUtil {
 
     public static void pressUpperCase(char c) throws Exception {
         c = Character.toLowerCase(c);
+//        sleep(1000);
         KeyDown(User32.MapVirtualKeyA(KeyEvent.VK_SHIFT));
+        sleep(1000);
         KeyPress(VKMapping.toScanCode("" + c));
+        sleep(1000);
         KeyUp(User32.MapVirtualKeyA(KeyEvent.VK_SHIFT));
+        sleep(1000);
     }
 
     static WinUser.INPUT input = new WinUser.INPUT();

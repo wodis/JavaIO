@@ -16,7 +16,7 @@ public class PbcPass {
     @JSONField(name = "random_factor")
     private String randomFactor;
 
-    private String created;
+    private long created;
 
     public long getId() {
         return id;
@@ -66,11 +66,11 @@ public class PbcPass {
         this.randomFactor = randomFactor;
     }
 
-    public String getCreated() {
+    public long getCreated() {
         return created;
     }
 
-    public void setCreated(String created) {
+    public void setCreated(long created) {
         this.created = created;
     }
 

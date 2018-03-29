@@ -19,8 +19,8 @@ import java.util.List;
 import static com.sun.jna.platform.win32.WinUser.*;
 
 public class PbcService {
-    private final static String IE_EDIT = "51f88";
-    private final static String DEV_EDIT = "5031e";
+    private final static String IE_EDIT = "20510";
+    private final static String DEV_EDIT = "40454";
 
     public void showIE(final Callback callback) {
         Logger.i("Start IE Window");
@@ -53,20 +53,18 @@ public class PbcService {
 
     public void showDev(final Callback callback) {
         Logger.i("Start IE Development Tools");
-        WinDef.HWND hwnd = User32.INSTANCE.FindWindow("IEDEVTOOLS", null);
+        WinDef.HWND hwnd = User32.INSTANCE.FindWindow("F13FrameWindow", null);
         final WinDef.HWND root = hwnd;
         User32.INSTANCE.ShowWindow(hwnd, SW_RESTORE);        // SW_RESTORE
         User32.INSTANCE.SetForegroundWindow(hwnd);   // bring to front
-        hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, "SysTabControl32", null);
-        hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, "#32770", null);
         hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, "WTL_SplitterWindow", null);
 
         User32.INSTANCE.EnumChildWindows(hwnd, new WinUser.WNDENUMPROC() {
             public boolean callback(WinDef.HWND hWnd, Pointer data) {
                 if (hWnd.getPointer().toString().contains(DEV_EDIT)) {
-                    Logger.i("Found Out IE Dev Window :" + hWnd.getPointer());
+//                    Logger.i("Found Out IE Dev Window :" + hWnd.getPointer());
                     User32.INSTANCE.SetFocus(hWnd);
-                    User32.INSTANCE.ShowWindow(hWnd, SW_NORMAL);        // SW_RESTORE
+//                    User32.INSTANCE.ShowWindow(hWnd, SW_NORMAL);
                     User32.INSTANCE.SetForegroundWindow(hWnd);   // bring to front
                     if (callback != null) {
                         callback.callback(root, hWnd);
@@ -91,7 +89,7 @@ public class PbcService {
     public List<PbcPass> listPassSrc() {
         List<PbcPass> list = new ArrayList<PbcPass>();
         try {
-            String result = HttpUtil.get("https://localhost/credit/list");
+            String result = HttpUtil.get("https://loannode.renrendai.com/credit/list");
             if (result != null) {
                 JSONObject object = JSON.parseObject(result);
                 if (!object.containsKey("code")) {
@@ -116,6 +114,9 @@ public class PbcService {
 
     public static void main(String[] args) {
         final PbcService pbcService = new PbcService();
+        pbcService.showIE(null);
         pbcService.showDev(null);
+        KeyBoardUtil.sendVirtualString("var x = 1; x");
+        KeyBoardUtil.sendVK(13);
     }
 }

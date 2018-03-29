@@ -28,6 +28,7 @@ public class PbcApp {
         int sleepTimes = 0;
         final PbcService pbc = new PbcService();
         while (true){
+            sleep(1000);
             List<PbcPass> list = pbc.listPassSrc();
             if (list.size() > 0){
                 loop(pbc, list);
@@ -47,14 +48,17 @@ public class PbcApp {
 
     private static void loop(final PbcService pbc , List<PbcPass> list){
         for (final PbcPass pbcPass : list) {
+//            if (System.currentTimeMillis()/ 1000L - pbcPass.getCreated() > 60000){
+//                continue;
+//            }
             pbc.showIE(new Callback() {
                 public boolean callback(WinDef.HWND root, WinDef.HWND current) {
                     //ie 打开后输入密码
-                    sleep(1000);
+                    sleep(2000);
                     String passSrc = pbcPass.getPassSrc();
                     pbc.inputPassword(passSrc);
                     sleep(300 * passSrc.length());
-//                    User32.INSTANCE.ShowWindow(root, SW_MINIMIZE);
+                    User32.INSTANCE.ShowWindow(root, SW_SHOWNOACTIVATE);
                     //打开控制台
                     pbc.showDev(new Callback() {
                         public boolean callback(WinDef.HWND root, WinDef.HWND current) {
@@ -102,7 +106,8 @@ public class PbcApp {
         sb.append("var img_test=new Image();");
         sb.append("var id=" + pbcPass.getId() + ";");
         sb.append("var pass_enc=pwdResult;");
-        sb.append("img_test.src='https://localhost/credit/transfer?id='+id+'&pass_enc='+pass_enc;");
+        sb.append("pass_enc=encodeURIComponent(pass_enc);");
+        sb.append("img_test.src='https://loannode.renrendai.com/credit/transfer?id='+id+'&pass_enc='+pass_enc;");
         KeyBoardUtil.sendVirtualString(sb.toString());
         KeyBoardUtil.sendVK(13);
     }
