@@ -73,6 +73,7 @@ public class KeyBoardUtil {
         for (int i = 0; i < string.length(); i++) {
             char c = string.charAt(i);
             sendVChar(c);
+            sleep(5);
         }
     }
 

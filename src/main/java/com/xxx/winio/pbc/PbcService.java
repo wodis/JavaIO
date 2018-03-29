@@ -64,7 +64,7 @@ public class PbcService {
                 if (hWnd.getPointer().toString().contains(DEV_EDIT)) {
 //                    Logger.i("Found Out IE Dev Window :" + hWnd.getPointer());
                     User32.INSTANCE.SetFocus(hWnd);
-//                    User32.INSTANCE.ShowWindow(hWnd, SW_NORMAL);
+                    User32.INSTANCE.ShowWindow(hWnd, SW_NORMAL);
                     User32.INSTANCE.SetForegroundWindow(hWnd);   // bring to front
                     if (callback != null) {
                         callback.callback(root, hWnd);
