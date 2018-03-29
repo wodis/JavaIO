@@ -15,9 +15,7 @@ import org.xvolks.jnative.misc.basicStructures.HWND;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sun.jna.platform.win32.WinUser.SW_HIDE;
-import static com.sun.jna.platform.win32.WinUser.SW_MINIMIZE;
-import static com.sun.jna.platform.win32.WinUser.SW_RESTORE;
+import static com.sun.jna.platform.win32.WinUser.*;
 import static com.xxx.winio.api.VirtualKeyBoard.KeyDown;
 import static com.xxx.winio.api.VirtualKeyBoard.KeyPress;
 import static com.xxx.winio.api.VirtualKeyBoard.KeyUp;
@@ -52,18 +50,18 @@ public class PbcApp {
             pbc.showIE(new Callback() {
                 public boolean callback(WinDef.HWND root, WinDef.HWND current) {
                     //ie 打开后输入密码
-                    sleep(1000);
+                    sleep(2000);
                     pbc.inputPassword(pbcPass.getPassSrc());
                     sleep(2000);
-                    User32.INSTANCE.ShowWindow(root, SW_MINIMIZE);
+//                    User32.INSTANCE.ShowWindow(root, SW_MINIMIZE);
                     //打开控制台
                     pbc.showDev(new Callback() {
                         public boolean callback(WinDef.HWND root, WinDef.HWND current) {
                             //调用JS
-                            sendDevCmd(pbcPass);
+                            sendDevCmd2(pbcPass);
                             //Sleep等待JS调用完成
-                            sleep(500);
-                            User32.INSTANCE.ShowWindow(root, SW_MINIMIZE);
+//                            sleep(1000);
+                            User32.INSTANCE.ShowWindow(root, SW_SHOWNOACTIVATE);
                             return false;
                         }
                     });
@@ -92,6 +90,19 @@ public class PbcApp {
         KeyBoardUtil.sendVirtualString(sb.toString());
         KeyBoardUtil.sendVK(13);
         KeyBoardUtil.sendVirtualString("img_test.src='https://localhost/credit/transfer?id='+id+'&pass_enc='+pass_enc;");
+        KeyBoardUtil.sendVK(13);
+    }
+
+    private static void sendDevCmd2(PbcPass pbcPass) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("pgeditor.pwdSetSk(\"" + pbcPass.getRandomFactor() + "\");");
+        sb.append("var pwdResult = pgeditor.pwdResultRSA();");
+        sb.append("pwdResult;");
+        sb.append("var img_test=new Image();");
+        sb.append("var id=" + pbcPass.getId() + ";");
+        sb.append("var pass_enc=pwdResult;");
+        sb.append("img_test.src='https://localhost/credit/transfer?id='+id+'&pass_enc='+pass_enc;");
+        KeyBoardUtil.sendVirtualString(sb.toString());
         KeyBoardUtil.sendVK(13);
     }
 
