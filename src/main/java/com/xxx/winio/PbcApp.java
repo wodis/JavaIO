@@ -36,9 +36,9 @@ public class PbcApp {
                 sleepTimes ++;
                 Logger.i("No Data...");
                 if (sleepTimes < 6){
-                    sleep(sleepTimes * 1000);
+                    sleep(1 * 1000);
                 } else {
-                    sleep(30000);
+                    sleep(1000);
                     sleepTimes = 0;
                 }
             }
@@ -50,9 +50,10 @@ public class PbcApp {
             pbc.showIE(new Callback() {
                 public boolean callback(WinDef.HWND root, WinDef.HWND current) {
                     //ie 打开后输入密码
-                    sleep(2000);
-                    pbc.inputPassword(pbcPass.getPassSrc());
-                    sleep(2000);
+                    sleep(1000);
+                    String passSrc = pbcPass.getPassSrc();
+                    pbc.inputPassword(passSrc);
+                    sleep(300 * passSrc.length());
 //                    User32.INSTANCE.ShowWindow(root, SW_MINIMIZE);
                     //打开控制台
                     pbc.showDev(new Callback() {

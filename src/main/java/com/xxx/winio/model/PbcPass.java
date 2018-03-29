@@ -16,6 +16,8 @@ public class PbcPass {
     @JSONField(name = "random_factor")
     private String randomFactor;
 
+    private String created;
+
     public long getId() {
         return id;
     }
@@ -62,6 +64,14 @@ public class PbcPass {
 
     public void setRandomFactor(String randomFactor) {
         this.randomFactor = randomFactor;
+    }
+
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
     }
 
     @Override
