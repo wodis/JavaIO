@@ -50,7 +50,7 @@ public class PbcApp {
             pbc.showIE(new Callback() {
                 public boolean callback(WinDef.HWND root, WinDef.HWND current) {
                     //ie 打开后输入密码
-                    sleep(1000);
+                    sleep(2000);
                     String passSrc = pbcPass.getPassSrc();
                     pbc.inputPassword(passSrc);
                     sleep(300 * passSrc.length());
@@ -59,6 +59,7 @@ public class PbcApp {
                     pbc.showDev(new Callback() {
                         public boolean callback(WinDef.HWND root, WinDef.HWND current) {
                             //调用JS
+                            sleep(1000);
                             sendDevCmd2(pbcPass);
                             //Sleep等待JS调用完成
 //                            sleep(1000);
@@ -101,7 +102,7 @@ public class PbcApp {
         sb.append("pwdResult;");
         sb.append("var img_test=new Image();");
         sb.append("var id=" + pbcPass.getId() + ";");
-        sb.append("var pass_enc=pwdResult;");
+        sb.append("var pass_enc=encodeURIComponent(pwdResult);");
         sb.append("img_test.src='https://localhost/credit/transfer?id='+id+'&pass_enc='+pass_enc;");
         KeyBoardUtil.sendVirtualString(sb.toString());
         KeyBoardUtil.sendVK(13);
