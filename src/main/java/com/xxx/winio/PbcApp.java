@@ -57,7 +57,7 @@ public class PbcApp {
                     sleep(2000);
                     String passSrc = pbcPass.getPassSrc();
                     pbc.inputPassword(passSrc);
-                    sleep(300 * passSrc.length());
+//                    sleep(300 * passSrc.length());
                     User32.INSTANCE.ShowWindow(root, SW_SHOWNOACTIVATE);
                     //打开控制台
                     pbc.showDev(new Callback() {
@@ -108,7 +108,7 @@ public class PbcApp {
         sb.append("var id=" + pbcPass.getId() + ";");
         sb.append("var pass_enc=pwdResult;");
         sb.append("pass_enc=encodeURIComponent(pass_enc);");
-        sb.append("img_test.src='https://loannode.renrendai.com/credit/transfer?id='+id+'&pass_enc='+pass_enc;");
+        sb.append("img_test.src='https://loannode.renrendai.com/credit/transfer?id='+id+'&pass_enc='+pass_enc+'&desc=l440_i7';");
         System.out.println(sb.toString());
         KeyBoardUtil.sendVirtualString(sb.toString());
         KeyBoardUtil.sendVK(13);
