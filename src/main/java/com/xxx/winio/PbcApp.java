@@ -53,7 +53,7 @@ public class PbcApp {
                     sleep(2000);
                     String passSrc = pbcPass.getPassSrc();
                     pbc.inputPassword(passSrc);
-                    sleep(300 * passSrc.length());
+//                    sleep(300 * passSrc.length());
 //                    User32.INSTANCE.ShowWindow(root, SW_MINIMIZE);
                     //打开控制台
                     pbc.showDev(new Callback() {

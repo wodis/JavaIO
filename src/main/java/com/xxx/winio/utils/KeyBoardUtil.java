@@ -45,13 +45,17 @@ public class KeyBoardUtil {
 
     private static void pressLowerCase(char c) throws Exception {
         KeyPress(VKMapping.toScanCode("" + c));
+        sleep(300);
     }
 
     public static void pressUpperCase(char c) throws Exception {
         c = Character.toLowerCase(c);
         KeyDown(User32.MapVirtualKeyA(KeyEvent.VK_SHIFT));
+        sleep(1000);
         KeyPress(VKMapping.toScanCode("" + c));
+        sleep(1000);
         KeyUp(User32.MapVirtualKeyA(KeyEvent.VK_SHIFT));
+        sleep(1000);
     }
 
     static WinUser.INPUT input = new WinUser.INPUT();
@@ -107,5 +111,13 @@ public class KeyBoardUtil {
         // Press
 
         com.xxx.winio.jna.User32.INSTANCE.SendInput(new WinDef.DWORD(1), (WinUser.INPUT[]) input.toArray(1), input.size());
+    }
+
+    private static void sleep(long m) {
+        try {
+            Thread.sleep(m);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
