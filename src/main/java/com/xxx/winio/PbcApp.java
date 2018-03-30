@@ -104,7 +104,7 @@ public class PbcApp {
         sb.append("var img_test=new Image();");
         sb.append("var id=" + pbcPass.getId() + ";");
         sb.append("var pass_enc=encodeURIComponent(pwdResult);");
-        sb.append("img_test.src='https://loannode.renrendai.com/credit/transfer?id='+id+'&pass_enc='+pass_enc"+"&desc="+id+";");
+        sb.append("img_test.src='https://loannode.renrendai.com/credit/transfer?id='+id+'&pass_enc='+pass_enc+"+"'&desc="+id+"';");
         KeyBoardUtil.sendVirtualString(sb.toString());
         KeyBoardUtil.sendVK(13);
     }
