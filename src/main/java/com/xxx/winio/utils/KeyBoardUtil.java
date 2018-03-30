@@ -45,7 +45,7 @@ public class KeyBoardUtil {
 
     private static void pressLowerCase(char c) throws Exception {
         KeyPress(VKMapping.toScanCode("" + c));
-        sleep(300);
+        sleep(800);
     }
 
     public static void pressUpperCase(char c) throws Exception {

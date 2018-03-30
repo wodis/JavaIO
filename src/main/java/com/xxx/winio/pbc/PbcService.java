@@ -19,8 +19,8 @@ import java.util.List;
 import static com.sun.jna.platform.win32.WinUser.*;
 
 public class PbcService {
-    private final static String IE_EDIT = "19049E";
-    private final static String DEV_EDIT = "C03A2";
+    private final static String IE_EDIT = "203E4";
+    private final static String DEV_EDIT = "10392";
 
     public void showIE(final Callback callback) {
         Logger.i("Start IE Window");

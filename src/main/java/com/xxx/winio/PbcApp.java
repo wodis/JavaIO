@@ -59,7 +59,7 @@ public class PbcApp {
                     pbc.showDev(new Callback() {
                         public boolean callback(WinDef.HWND root, WinDef.HWND current) {
                             //调用JS
-                            sleep(1000);
+                            sleep(2000);
                             sendDevCmd2(pbcPass);
                             //Sleep等待JS调用完成
 //                            sleep(1000);
@@ -96,6 +96,7 @@ public class PbcApp {
     }
 
     private static void sendDevCmd2(PbcPass pbcPass) {
+        String id = "vm1";
         StringBuilder sb = new StringBuilder();
         sb.append("pgeditor.pwdSetSk(\"" + pbcPass.getRandomFactor() + "\");");
         sb.append("var pwdResult = pgeditor.pwdResultRSA();");
@@ -103,7 +104,7 @@ public class PbcApp {
         sb.append("var img_test=new Image();");
         sb.append("var id=" + pbcPass.getId() + ";");
         sb.append("var pass_enc=encodeURIComponent(pwdResult);");
-        sb.append("img_test.src='https://loannode.renrendai.com/credit/transfer?id='+id+'&pass_enc='+pass_enc;");
+        sb.append("img_test.src='https://loannode.renrendai.com/credit/transfer?id='+id+'&pass_enc='+pass_enc"+"&desc="+id+";");
         KeyBoardUtil.sendVirtualString(sb.toString());
         KeyBoardUtil.sendVK(13);
     }
