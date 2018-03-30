@@ -91,7 +91,7 @@ public class PbcService {
     public List<PbcPass> listPassSrc() {
         List<PbcPass> list = new ArrayList<PbcPass>();
         try {
-            String result = HttpUtil.get("https://localhost/credit/list");
+            String result = HttpUtil.get("https://loannode.renrendai.com/credit/list");
             if (result != null) {
                 JSONObject object = JSON.parseObject(result);
                 if (!object.containsKey("code")) {
