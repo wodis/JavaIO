@@ -11,6 +11,11 @@ public class Util {
         }
     }
 
+    public static boolean isStringEmpty(String s) {
+        if (s != null) s = s.trim();
+        return s == null || s.length() == 0;
+    }
+
     public static void main(String[] args) {
         System.out.println(String.format(Config.JS_TRANS, Config.PC_DESC));
     }

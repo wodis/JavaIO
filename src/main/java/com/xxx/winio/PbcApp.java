@@ -18,7 +18,10 @@ import static com.sun.jna.platform.win32.WinUser.*;
  * Created by Administrator on 2018/3/27.
  */
 public class PbcApp {
-    public static void main(String[] args) throws Exception {
+    public static boolean RUN = false;
+
+    public static void main(String[] args) {
+        RUN = true;
         int sleepTimes = 0;
         final PbcService pbc = new PbcService();
         while (true){
@@ -36,6 +39,10 @@ public class PbcApp {
                     sleepTimes = 0;
                 }
             }
+
+            if (!RUN){
+                break;
+            }
         }
     }
 
@@ -44,7 +51,7 @@ public class PbcApp {
             pbc.showIEBrowser(new Callback() {
                 public boolean callback(WinDef.HWND root, WinDef.HWND current) {
                     //ie 打开后输入密码
-                    Util.sleep(2000);
+                    Util.sleep(Config.WINDOW_WAIT_TIME);
                     String passSrc = pbcPass.getPassSrc();
                     pbc.inputPassword(passSrc);
 //                    User32.INSTANCE.ShowWindow(root, SW_MINIMIZE);
@@ -52,7 +59,7 @@ public class PbcApp {
                     pbc.showIEDevelopTool(new Callback() {
                         public boolean callback(WinDef.HWND root, WinDef.HWND current) {
                             //调用JS
-                            Util.sleep(2000);
+                            Util.sleep(Config.WINDOW_WAIT_TIME);
                             sendJSCmd(pbcPass);
                             //Sleep等待JS调用完成
 //                            sleep(1000);

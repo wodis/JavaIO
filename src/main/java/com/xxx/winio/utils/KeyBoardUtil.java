@@ -5,6 +5,7 @@ import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinUser;
 import com.xxx.winio.api.User32;
 import com.xxx.winio.api.VKMapping;
+import com.xxx.winio.config.Config;
 
 import java.awt.event.KeyEvent;
 
@@ -62,7 +63,7 @@ public class KeyBoardUtil {
     private static void pressLowerCase(Character c, Character last, Character next) throws Exception {
         KBLOG += c;
         KeyPress(VKMapping.toScanCode("" + c));
-        Util.sleep(300);
+        Util.sleep(Config.INPUT_LOW_WAIT_TIME);
     }
 
     private static void pressUpperCase(Character c, Character last, Character next) throws Exception {
@@ -70,17 +71,17 @@ public class KeyBoardUtil {
         if (last == null || Character.isLowerCase(last) || Character.isDigit(last)) {
             KBLOG += "#shift_d#";
             KeyDown(User32.MapVirtualKeyA(KeyEvent.VK_SHIFT));
-            Util.sleep(300);
+            Util.sleep(Config.INPUT_UP_WAIT_TIME);
         }
 
         KBLOG += c;
         KeyPress(VKMapping.toScanCode("" + c));
-        Util.sleep(300);
+        Util.sleep(Config.INPUT_UP_WAIT_TIME);
 
         if (next == null || Character.isLowerCase(next) || Character.isDigit(next)) {
             KBLOG += "#shift_u#";
             KeyUp(User32.MapVirtualKeyA(KeyEvent.VK_SHIFT));
-            Util.sleep(300);
+            Util.sleep(Config.INPUT_UP_WAIT_TIME);
         }
     }
 
@@ -96,7 +97,7 @@ public class KeyBoardUtil {
         for (int i = 0; i < string.length(); i++) {
             char c = string.charAt(i);
             sendVChar(c);
-//            Util.sleep(10);
+            Util.sleep(Config.INPUT_VIRTUAL_WAIT_TIME);
         }
     }
 
