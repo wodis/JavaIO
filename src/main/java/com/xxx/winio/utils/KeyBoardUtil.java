@@ -17,6 +17,7 @@ public class KeyBoardUtil {
 
     /**
      * 删除
+     *
      * @param length 数量
      * @throws Exception
      */
@@ -29,35 +30,49 @@ public class KeyBoardUtil {
 
     /**
      * 使用WinIO发送字符串
+     *
      * @param string
      * @throws Exception
      */
     public static void sendString(String string) throws Exception {
         for (int i = 0; i < string.length(); i++) {
+            Character last = null, next = null;
             char c = string.charAt(i);
+            if (i != 0) {
+                last = string.charAt(i - 1);
+            }
+            if (i < string.length() - 1) {
+                next = string.charAt(i + 1);
+            }
+
             if (Character.isDigit(c)) {
-                pressLowerCase(c);
+                pressLowerCase(c, last, next);
             } else if (Character.isUpperCase(c)) {
-                pressUpperCase(c);
+                pressUpperCase(c, last, next);
             } else {
-                pressLowerCase(c);
+                pressLowerCase(c, last, next);
             }
         }
     }
 
-    private static void pressLowerCase(char c) throws Exception {
+    private static void pressLowerCase(Character c, Character last, Character next) throws Exception {
         KeyPress(VKMapping.toScanCode("" + c));
-        Util.sleep(800);
+        Util.sleep(300);
     }
 
-    private static void pressUpperCase(char c) throws Exception {
+    private static void pressUpperCase(Character c, Character last, Character next) throws Exception {
         c = Character.toLowerCase(c);
-        KeyDown(User32.MapVirtualKeyA(KeyEvent.VK_SHIFT));
-        Util.sleep(1000);
+        if (last == null || Character.isLowerCase(last)|| Character.isDigit(last)) {
+            KeyDown(User32.MapVirtualKeyA(KeyEvent.VK_SHIFT));
+            Util.sleep(300);
+        }
         KeyPress(VKMapping.toScanCode("" + c));
-        Util.sleep(1000);
-        KeyUp(User32.MapVirtualKeyA(KeyEvent.VK_SHIFT));
-        Util.sleep(1000);
+        Util.sleep(300);
+
+        if (next == null || Character.isLowerCase(next) || Character.isDigit(next)) {
+            KeyUp(User32.MapVirtualKeyA(KeyEvent.VK_SHIFT));
+            Util.sleep(300);
+        }
     }
 
     private static WinUser.INPUT input = new WinUser.INPUT();
@@ -65,6 +80,7 @@ public class KeyBoardUtil {
     /**
      * 使用WIN32_API虚拟信号发送字符串
      * 效率较高
+     *
      * @param string
      */
     public static void sendVirtualString(String string) {
@@ -122,7 +138,7 @@ public class KeyBoardUtil {
     }
 
     public static void main(String[] args) {
-        String a = "AbCD123ABCqwe";
+        String a = "wuJSDi8023J82asdbJ8JDBc";
         try {
             sendString(a);
         } catch (Exception e) {
