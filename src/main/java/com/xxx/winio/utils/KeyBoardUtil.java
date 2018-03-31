@@ -14,16 +14,26 @@ import static com.xxx.winio.api.VirtualKeyBoard.KeyPress;
 import static com.xxx.winio.api.VirtualKeyBoard.KeyUp;
 
 public class KeyBoardUtil {
+
+    /**
+     * 删除
+     * @param length 数量
+     * @throws Exception
+     */
     public static void delete(int length) throws Exception {
         for (int i = 0; i < length; i++) {
             KeyPress(VKMapping.toScanCode("Backspace"));
-//            Thread.sleep(1);
         }
+        Util.sleep(1000);
     }
 
+    /**
+     * 使用WinIO发送字符串
+     * @param string
+     * @throws Exception
+     */
     public static void sendString(String string) throws Exception {
         for (int i = 0; i < string.length(); i++) {
-            sleep(100);
             char c = string.charAt(i);
             if (Character.isDigit(c)) {
                 pressLowerCase(c);
@@ -35,41 +45,28 @@ public class KeyBoardUtil {
         }
     }
 
-    private static void sleep(long m) {
-        try {
-            Thread.sleep(m);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        String a = "AbCD123ABCqwe";
-        try {
-            sendString(a);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private static void pressLowerCase(char c) throws Exception {
         KeyPress(VKMapping.toScanCode("" + c));
-        sleep(300);
+        Util.sleep(800);
     }
 
-    public static void pressUpperCase(char c) throws Exception {
+    private static void pressUpperCase(char c) throws Exception {
         c = Character.toLowerCase(c);
-//        sleep(1000);
         KeyDown(User32.MapVirtualKeyA(KeyEvent.VK_SHIFT));
-        sleep(1000);
+        Util.sleep(1000);
         KeyPress(VKMapping.toScanCode("" + c));
-        sleep(1000);
+        Util.sleep(1000);
         KeyUp(User32.MapVirtualKeyA(KeyEvent.VK_SHIFT));
-        sleep(1000);
+        Util.sleep(1000);
     }
 
-    static WinUser.INPUT input = new WinUser.INPUT();
+    private static WinUser.INPUT input = new WinUser.INPUT();
 
+    /**
+     * 使用WIN32_API虚拟信号发送字符串
+     * 效率较高
+     * @param string
+     */
     public static void sendVirtualString(String string) {
         for (int i = 0; i < string.length(); i++) {
             char c = string.charAt(i);
@@ -98,7 +95,7 @@ public class KeyBoardUtil {
 
     }
 
-    public static void sendVChar(char ch) {
+    private static void sendVChar(char ch) {
         input.type = new WinDef.DWORD(WinUser.INPUT.INPUT_KEYBOARD);
         input.input.setType("ki"); // Because setting INPUT_INPUT_KEYBOARD is not enough: https://groups.google.com/d/msg/jna-users/NDBGwC1VZbU/cjYCQ1CjBwAJ
         input.input.ki.wVk = new WinDef.WORD(0); // 0x41
@@ -122,5 +119,14 @@ public class KeyBoardUtil {
         // Press
 
         com.xxx.winio.jna.User32.INSTANCE.SendInput(new WinDef.DWORD(1), (WinUser.INPUT[]) input.toArray(1), input.size());
+    }
+
+    public static void main(String[] args) {
+        String a = "AbCD123ABCqwe";
+        try {
+            sendString(a);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

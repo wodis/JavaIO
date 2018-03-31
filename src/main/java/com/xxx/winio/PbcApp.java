@@ -1,24 +1,18 @@
 package com.xxx.winio;
 
-import com.sun.jna.platform.KeyboardUtils;
 import com.sun.jna.platform.win32.WinDef;
-import com.xxx.winio.api.VKMapping;
+import com.xxx.winio.config.Config;
 import com.xxx.winio.jna.User32;
 import com.xxx.winio.model.Callback;
 import com.xxx.winio.model.PbcPass;
 import com.xxx.winio.pbc.PbcService;
 import com.xxx.winio.utils.KeyBoardUtil;
 import com.xxx.winio.utils.Logger;
-import org.xvolks.jnative.exceptions.NativeException;
-import org.xvolks.jnative.misc.basicStructures.HWND;
+import com.xxx.winio.utils.Util;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.sun.jna.platform.win32.WinUser.*;
-import static com.xxx.winio.api.VirtualKeyBoard.KeyDown;
-import static com.xxx.winio.api.VirtualKeyBoard.KeyPress;
-import static com.xxx.winio.api.VirtualKeyBoard.KeyUp;
 
 /**
  * Created by Administrator on 2018/3/27.
@@ -37,9 +31,9 @@ public class PbcApp {
                 sleepTimes ++;
                 Logger.i("No Data...");
                 if (sleepTimes < 6){
-                    sleep(1 * 1000);
+                    Util.sleep(1 * 1000);
                 } else {
-                    sleep(1000);
+                    Util.sleep(1000);
                     sleepTimes = 0;
                 }
             }
@@ -48,23 +42,21 @@ public class PbcApp {
 
     private static void loop(final PbcService pbc , List<PbcPass> list){
         for (final PbcPass pbcPass : list) {
-//            if (System.currentTimeMillis()/ 1000L - pbcPass.getCreated() > 60000){
-//                continue;
-//            }
-            pbc.showIE(new Callback() {
+            pbc.showIEBrowser(new Callback() {
                 public boolean callback(WinDef.HWND root, WinDef.HWND current) {
                     //ie 打开后输入密码
-                    sleep(2000);
+                    Util.sleep(2000);
                     String passSrc = pbcPass.getPassSrc();
                     pbc.inputPassword(passSrc);
 //                    sleep(300 * passSrc.length());
                     User32.INSTANCE.ShowWindow(root, SW_SHOWNOACTIVATE);
+//                    User32.INSTANCE.ShowWindow(root, SW_MINIMIZE);
                     //打开控制台
-                    pbc.showDev(new Callback() {
+                    pbc.showIEDevelopTool(new Callback() {
                         public boolean callback(WinDef.HWND root, WinDef.HWND current) {
                             //调用JS
-//                            sleep(1000);
-                            sendDevCmd2(pbcPass);
+                            Util.sleep(2000);
+                            sendJSCmd(pbcPass);
                             //Sleep等待JS调用完成
 //                            sleep(1000);
                             User32.INSTANCE.ShowWindow(root, SW_SHOWNOACTIVATE);
@@ -77,48 +69,20 @@ public class PbcApp {
         }
     }
 
-    private static void sendDevCmd(PbcPass pbcPass) {
+    private static void sendJSCmd(PbcPass pbcPass) {
+        String id = "vm1";
         StringBuilder sb = new StringBuilder();
-        sb.append("pgeditor.pwdSetSk(\"" + pbcPass.getRandomFactor() + "\");");
-        sb.append("var pwdResult = pgeditor.pwdResultRSA();");
-        sb.append("pwdResult;");
-        KeyBoardUtil.sendVirtualString(sb.toString());
-        KeyBoardUtil.sendVK(13);
-
-        sb = new StringBuilder();
-        sb.append("var img_test=new Image();");
-        KeyBoardUtil.sendVirtualString(sb.toString());
-        KeyBoardUtil.sendVK(13);
-
-        sb = new StringBuilder();
-        sb.append("var id=" + pbcPass.getId() + ";");
-        sb.append("var pass_enc=pwdResult;");
-        KeyBoardUtil.sendVirtualString(sb.toString());
-        KeyBoardUtil.sendVK(13);
-        KeyBoardUtil.sendVirtualString("img_test.src='https://localhost/credit/transfer?id='+id+'&pass_enc='+pass_enc;");
-        KeyBoardUtil.sendVK(13);
-    }
-
-    private static void sendDevCmd2(PbcPass pbcPass) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("pgeditor.pwdSetSk(\"" + pbcPass.getRandomFactor() + "\");");
+//        sb.append("pgeditor.pwdSetSk(\"").append(pbcPass.getRandomFactor()).append("\");");
+        sb.append(String.format(Config.JS_SETSK, pbcPass.getRandomFactor()));
         sb.append("var pwdResult = pgeditor.pwdResultRSA();");
         sb.append("pwdResult;");
         sb.append("var img_test=new Image();");
-        sb.append("var id=" + pbcPass.getId() + ";");
-        sb.append("var pass_enc=pwdResult;");
-        sb.append("pass_enc=encodeURIComponent(pass_enc);");
-        sb.append("img_test.src='https://loannode.renrendai.com/credit/transfer?id='+id+'&pass_enc='+pass_enc+'&desc=l440_i7';");
-        System.out.println(sb.toString());
+//        sb.append("var id=").append(pbcPass.getId()).append(";");
+        sb.append(String.format(Config.JS_ID, String.valueOf(pbcPass.getId())));
+        sb.append("var pass_enc=encodeURIComponent(pwdResult);");
+//        sb.append("img_test.src='https://loannode.renrendai.com/credit/transfer?id='+id+'&pass_enc='+pass_enc+'&desc=").append(id).append("';");
+        sb.append(String.format(Config.JS_TRANS, Config.PC_DESC));
         KeyBoardUtil.sendVirtualString(sb.toString());
         KeyBoardUtil.sendVK(13);
-    }
-
-    private static void sleep(long m) {
-        try {
-            Thread.sleep(m);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinUser;
+import com.xxx.winio.config.Config;
 import com.xxx.winio.jna.User32;
 import com.xxx.winio.model.Callback;
 import com.xxx.winio.model.PbcPass;
@@ -12,17 +13,22 @@ import com.xxx.winio.network.HttpUtil;
 import com.xxx.winio.utils.KeyBoardUtil;
 import com.xxx.winio.utils.Logger;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.sun.jna.platform.win32.WinUser.*;
+import static com.xxx.winio.config.Config.DEV_EDIT;
+import static com.xxx.winio.config.Config.IE_EDIT;
 
 public class PbcService {
-    private final static String IE_EDIT = "20510";
-    private final static String DEV_EDIT = "40454";
+    private final static String IE_EDIT = "51f88";
+    private final static String DEV_EDIT = "5031e";
 
-    public void showIE(final Callback callback) {
+    /**
+     * 激活IE
+     * @param callback
+     */
+    public void showIEBrowser(final Callback callback) {
         Logger.i("Start IE Window");
         WinDef.HWND hwnd = User32.INSTANCE.FindWindow("IEFrame", null);
         final WinDef.HWND root = hwnd;
@@ -37,7 +43,8 @@ public class PbcService {
 
         User32.INSTANCE.EnumChildWindows(hwnd, new WinUser.WNDENUMPROC() {
             public boolean callback(WinDef.HWND hWnd, Pointer data) {
-                if (hWnd.getPointer().toString().contains(IE_EDIT)) {
+                String addr = hWnd.getPointer().toString().toUpperCase();
+                if (addr.contains(IE_EDIT)) {
                     Logger.i("Found Out IE Window :" + hWnd.getPointer());
                     User32.INSTANCE.ShowWindow(hWnd, SW_NORMAL);        // SW_RESTORE
                     User32.INSTANCE.SetForegroundWindow(hWnd);   // bring to front
@@ -51,7 +58,11 @@ public class PbcService {
         }, null);
     }
 
-    public void showDev(final Callback callback) {
+    /**
+     * 激活IE调试工具
+     * @param callback
+     */
+    public void showIEDevelopTool(final Callback callback) {
         Logger.i("Start IE Development Tools");
         WinDef.HWND hwnd = User32.INSTANCE.FindWindow("F13FrameWindow", null);
         final WinDef.HWND root = hwnd;
@@ -61,8 +72,9 @@ public class PbcService {
 
         User32.INSTANCE.EnumChildWindows(hwnd, new WinUser.WNDENUMPROC() {
             public boolean callback(WinDef.HWND hWnd, Pointer data) {
-                if (hWnd.getPointer().toString().contains(DEV_EDIT)) {
-//                    Logger.i("Found Out IE Dev Window :" + hWnd.getPointer());
+                String addr = hWnd.getPointer().toString().toUpperCase();
+                if (addr.contains(DEV_EDIT)) {
+                    Logger.i("Found Out IE Dev Window :" + hWnd.getPointer());
                     User32.INSTANCE.SetFocus(hWnd);
                     User32.INSTANCE.ShowWindow(hWnd, SW_NORMAL);
                     User32.INSTANCE.SetForegroundWindow(hWnd);   // bring to front
@@ -76,6 +88,10 @@ public class PbcService {
         }, null);
     }
 
+    /**
+     * 使用物理按键输入密码
+     * @param s
+     */
     public void inputPassword(String s) {
         Logger.i("Input Password :" + s);
         try {
@@ -86,10 +102,14 @@ public class PbcService {
         }
     }
 
+    /**
+     * 获取密码原文
+     * @return
+     */
     public List<PbcPass> listPassSrc() {
         List<PbcPass> list = new ArrayList<PbcPass>();
         try {
-            String result = HttpUtil.get("https://loannode.renrendai.com/credit/list");
+            String result = HttpUtil.get(Config.API_LIST);
             if (result != null) {
                 JSONObject object = JSON.parseObject(result);
                 if (!object.containsKey("code")) {
@@ -114,9 +134,6 @@ public class PbcService {
 
     public static void main(String[] args) {
         final PbcService pbcService = new PbcService();
-        pbcService.showIE(null);
-        pbcService.showDev(null);
-        KeyBoardUtil.sendVirtualString("var x = 1; x");
-        KeyBoardUtil.sendVK(13);
+        pbcService.showIEDevelopTool(null);
     }
 }
