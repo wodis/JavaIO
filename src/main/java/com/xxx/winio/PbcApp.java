@@ -22,7 +22,7 @@ public class PbcApp {
         int sleepTimes = 0;
         final PbcService pbc = new PbcService();
         while (true){
-            sleep(1000);
+            Util.sleep(1000);
             List<PbcPass> list = pbc.listPassSrc();
             if (list.size() > 0){
                 loop(pbc, list);

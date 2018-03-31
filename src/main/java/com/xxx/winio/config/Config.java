@@ -6,8 +6,8 @@ public class Config {
     /**
      * IE句柄
      */
-    public final static String IE_EDIT = "203E4";
-    public final static String DEV_EDIT = "10392";
+    public final static String IE_EDIT = "303FE";
+    public final static String DEV_EDIT = "20486";
 
     public static final String API_LIST = "https://loannode.renrendai.com/credit/list";
 

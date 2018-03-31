@@ -21,9 +21,6 @@ import static com.xxx.winio.config.Config.DEV_EDIT;
 import static com.xxx.winio.config.Config.IE_EDIT;
 
 public class PbcService {
-    private final static String IE_EDIT = "51f88";
-    private final static String DEV_EDIT = "5031e";
-
     /**
      * 激活IE
      * @param callback
