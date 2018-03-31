@@ -15,6 +15,8 @@ import static com.xxx.winio.api.VirtualKeyBoard.KeyUp;
 
 public class KeyBoardUtil {
 
+    public static String KBLOG = "";
+
     /**
      * 删除
      *
@@ -35,6 +37,7 @@ public class KeyBoardUtil {
      * @throws Exception
      */
     public static void sendString(String string) throws Exception {
+        KBLOG = "";
         for (int i = 0; i < string.length(); i++) {
             Character last = null, next = null;
             char c = string.charAt(i);
@@ -53,23 +56,29 @@ public class KeyBoardUtil {
                 pressLowerCase(c, last, next);
             }
         }
+        Logger.i("Real Input: " + KBLOG);
     }
 
     private static void pressLowerCase(Character c, Character last, Character next) throws Exception {
+        KBLOG += c;
         KeyPress(VKMapping.toScanCode("" + c));
         Util.sleep(300);
     }
 
     private static void pressUpperCase(Character c, Character last, Character next) throws Exception {
         c = Character.toLowerCase(c);
-        if (last == null || Character.isLowerCase(last)|| Character.isDigit(last)) {
+        if (last == null || Character.isLowerCase(last) || Character.isDigit(last)) {
+            KBLOG += "#shift_d#";
             KeyDown(User32.MapVirtualKeyA(KeyEvent.VK_SHIFT));
             Util.sleep(300);
         }
+
+        KBLOG += c;
         KeyPress(VKMapping.toScanCode("" + c));
         Util.sleep(300);
 
         if (next == null || Character.isLowerCase(next) || Character.isDigit(next)) {
+            KBLOG += "#shift_u#";
             KeyUp(User32.MapVirtualKeyA(KeyEvent.VK_SHIFT));
             Util.sleep(300);
         }
