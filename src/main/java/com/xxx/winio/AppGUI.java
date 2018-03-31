@@ -53,16 +53,32 @@ public class AppGUI {
         gui.run.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (setConfig()){
-                    PbcApp.main(new String[0]);
                     gui.run.setEnabled(false);
+                    new Thread(new Runnable() {
+                        public void run() {
+                            PbcApp.main(new String[0]);
+                        }
+                    }).start();
                 }
             }
         });
 
         gui.stop.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                gui.stop.setEnabled(false);
                 PbcApp.RUN = false;
-                gui.run.setEnabled(true);
+                new Thread(new Runnable() {
+                    public void run() {
+                        while (true){
+                            if (PbcApp.BREAK){
+                                gui.run.setEnabled(true);
+                                gui.stop.setEnabled(true);
+                                break;
+                            }
+                            Util.sleep(1000);
+                        }
+                    }
+                }).start();
             }
         });
     }

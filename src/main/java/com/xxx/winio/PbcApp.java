@@ -19,9 +19,11 @@ import static com.sun.jna.platform.win32.WinUser.*;
  */
 public class PbcApp {
     public static boolean RUN = false;
+    public static boolean BREAK = true;
 
     public static void main(String[] args) {
         RUN = true;
+        BREAK = false;
         int sleepTimes = 0;
         final PbcService pbc = new PbcService();
         while (true){
@@ -41,6 +43,7 @@ public class PbcApp {
             }
 
             if (!RUN){
+                BREAK = true;
                 break;
             }
         }
