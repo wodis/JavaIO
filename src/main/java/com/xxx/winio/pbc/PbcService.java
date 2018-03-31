@@ -19,8 +19,8 @@ import java.util.List;
 import static com.sun.jna.platform.win32.WinUser.*;
 
 public class PbcService {
-    private final static String IE_EDIT = "51f88";
-    private final static String DEV_EDIT = "5031e";
+    private final static String IE_EDIT = "19049E";
+    private final static String DEV_EDIT = "C03A2";
 
     public void showIE(final Callback callback) {
         Logger.i("Start IE Window");
@@ -37,7 +37,8 @@ public class PbcService {
 
         User32.INSTANCE.EnumChildWindows(hwnd, new WinUser.WNDENUMPROC() {
             public boolean callback(WinDef.HWND hWnd, Pointer data) {
-                if (hWnd.getPointer().toString().contains(IE_EDIT)) {
+                String addr = hWnd.getPointer().toString().toUpperCase();
+                if (addr.contains(IE_EDIT)) {
                     Logger.i("Found Out IE Window :" + hWnd.getPointer());
                     User32.INSTANCE.ShowWindow(hWnd, SW_NORMAL);        // SW_RESTORE
                     User32.INSTANCE.SetForegroundWindow(hWnd);   // bring to front
@@ -63,7 +64,8 @@ public class PbcService {
 
         User32.INSTANCE.EnumChildWindows(hwnd, new WinUser.WNDENUMPROC() {
             public boolean callback(WinDef.HWND hWnd, Pointer data) {
-                if (hWnd.getPointer().toString().contains(DEV_EDIT)) {
+                String addr = hWnd.getPointer().toString().toUpperCase();
+                if (addr.contains(DEV_EDIT)) {
                     Logger.i("Found Out IE Dev Window :" + hWnd.getPointer());
                     User32.INSTANCE.SetFocus(hWnd);
                     User32.INSTANCE.ShowWindow(hWnd, SW_NORMAL);        // SW_RESTORE
