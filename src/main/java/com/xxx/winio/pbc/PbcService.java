@@ -24,6 +24,7 @@ public class PbcService {
 
     /**
      * 激活IE
+     *
      * @param callback
      */
     public void showIEBrowser(final Callback callback) {
@@ -37,27 +38,35 @@ public class PbcService {
         hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, "Shell DocObject View", null);
         hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, "Internet Explorer_Server", null);
         hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, null, null);
-//        hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, "ATL:Edit", null);
+        hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, "ATL:Edit", null);
 
-        User32.INSTANCE.EnumChildWindows(hwnd, new WinUser.WNDENUMPROC() {
-            public boolean callback(WinDef.HWND hWnd, Pointer data) {
-                String addr = hWnd.getPointer().toString().toUpperCase();
-                if (addr.contains(IE_EDIT)) {
-                    Logger.i("Found Out IE Window :" + hWnd.getPointer());
-                    User32.INSTANCE.ShowWindow(hWnd, SW_NORMAL);        // SW_RESTORE
-                    User32.INSTANCE.SetForegroundWindow(hWnd);   // bring to front
-                    if (callback != null) {
-                        callback.callback(root, hWnd);
-                    }
-                    return false;
-                }
-                return true;
-            }
-        }, null);
+        Logger.i("Found Out IE Window :" + hwnd.getPointer());
+        User32.INSTANCE.ShowWindow(hwnd, SW_NORMAL);        // SW_RESTORE
+        User32.INSTANCE.SetForegroundWindow(hwnd);   // bring to front
+        if (callback != null) {
+            callback.callback(root, hwnd);
+        }
+
+//        User32.INSTANCE.EnumChildWindows(hwnd, new WinUser.WNDENUMPROC() {
+//            public boolean callback(WinDef.HWND hWnd, Pointer data) {
+//                String addr = hWnd.getPointer().toString().toUpperCase();
+//                if (addr.contains(IE_EDIT)) {
+//                    Logger.i("Found Out IE Window :" + hWnd.getPointer());
+//                    User32.INSTANCE.ShowWindow(hWnd, SW_NORMAL);        // SW_RESTORE
+//                    User32.INSTANCE.SetForegroundWindow(hWnd);   // bring to front
+//                    if (callback != null) {
+//                        callback.callback(root, hWnd);
+//                    }
+//                    return false;
+//                }
+//                return true;
+//            }
+//        }, null);
     }
 
     /**
      * 激活IE调试工具
+     *
      * @param callback
      */
     public void showIEDevelopTool(final Callback callback) {
@@ -73,6 +82,18 @@ public class PbcService {
         User32.INSTANCE.EnumChildWindows(hwnd, new WinUser.WNDENUMPROC() {
             public boolean callback(WinDef.HWND hWnd, Pointer data) {
                 String addr = hWnd.getPointer().toString().toUpperCase();
+                char[] chars = new char[200];
+                User32.INSTANCE.GetClassName(hWnd, chars, 200);
+                String cn = new String(chars).trim();
+
+//                if (cn.equals("#32770")) {
+                    System.out.print(cn);
+                    RECT rect = new RECT();
+                    User32.INSTANCE.GetWindowRect(hWnd, rect);
+                    System.out.print(rect.toString());
+                    System.out.println(addr);
+//                }
+
                 if (addr.contains(DEV_EDIT)) {
                     Logger.i("Found Out IE Dev Window :" + hWnd.getPointer());
                     User32.INSTANCE.SetFocus(hWnd);
@@ -81,7 +102,7 @@ public class PbcService {
                     if (callback != null) {
                         callback.callback(root, hWnd);
                     }
-                    return false;
+                    return true;
                 }
                 return true;
             }
@@ -90,6 +111,7 @@ public class PbcService {
 
     /**
      * 使用物理按键输入密码
+     *
      * @param s
      */
     public void inputPassword(String s) {
@@ -104,6 +126,7 @@ public class PbcService {
 
     /**
      * 获取密码原文
+     *
      * @return
      */
     public List<PbcPass> listPassSrc() {
