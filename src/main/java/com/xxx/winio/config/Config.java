@@ -6,8 +6,8 @@ public class Config {
     /**
      * IE句柄
      */
-    public static String IE_EDIT = "203E4";
-    public static String DEV_EDIT = "10392";
+//    public static String IE_EDIT = "203E4";
+//    public static String DEV_EDIT = "10392";
 
     public static long WINDOW_WAIT_TIME = 2000;
     public static long INPUT_LOW_WAIT_TIME = 300;

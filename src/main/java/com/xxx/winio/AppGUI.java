@@ -11,16 +11,16 @@ public class AppGUI {
     private JLabel lname;
     private JTextField desc;
     private JPanel panel1;
-    private JLabel pbcLable;
-    private JTextField pbcEdit;
-    private JLabel jsLable;
+//    private JLabel pbcLable;
+//    private JTextField pbcEdit;
+//    private JLabel jsLable;
+//    private JTextField jsEdit;
     private JTextField windowWait;
     private JTextField lowTime;
     private JTextField upTime;
     private JTextField virturalTime;
     private JButton run;
     private JButton stop;
-    private JTextField jsEdit;
     private JTextPane cmd;
 
     private static AppGUI gui;
@@ -43,8 +43,8 @@ public class AppGUI {
 
     private static void initView() {
         gui.desc.setText(Config.PC_DESC);
-        gui.pbcEdit.setText(Config.IE_EDIT);
-        gui.jsEdit.setText(Config.DEV_EDIT);
+//        gui.pbcEdit.setText(Config.IE_EDIT);
+//        gui.jsEdit.setText(Config.DEV_EDIT);
         gui.windowWait.setText(Config.WINDOW_WAIT_TIME + "");
         gui.lowTime.setText(Config.INPUT_LOW_WAIT_TIME + "");
         gui.upTime.setText(Config.INPUT_UP_WAIT_TIME + "");
@@ -85,8 +85,8 @@ public class AppGUI {
 
     private static boolean setConfig() {
         if (Util.isStringEmpty(gui.desc.getText())
-                || Util.isStringEmpty(gui.pbcEdit.getText())
-                || Util.isStringEmpty(gui.jsEdit.getText())
+//                || Util.isStringEmpty(gui.pbcEdit.getText())
+//                || Util.isStringEmpty(gui.jsEdit.getText())
                 || Util.isStringEmpty(gui.windowWait.getText())
                 || Util.isStringEmpty(gui.lowTime.getText())
                 || Util.isStringEmpty(gui.upTime.getText())
@@ -97,8 +97,8 @@ public class AppGUI {
 
 
         Config.PC_DESC = gui.desc.getText();
-        Config.IE_EDIT = gui.pbcEdit.getText();
-        Config.DEV_EDIT = gui.jsEdit.getText();
+//        Config.IE_EDIT = gui.pbcEdit.getText();
+//        Config.DEV_EDIT = gui.jsEdit.getText();
         Config.WINDOW_WAIT_TIME = Long.parseLong(gui.windowWait.getText());
         Config.INPUT_LOW_WAIT_TIME = Long.parseLong(gui.lowTime.getText());
         Config.INPUT_UP_WAIT_TIME = Long.parseLong(gui.upTime.getText());

@@ -9,6 +9,7 @@ import com.xxx.winio.config.Config;
 import com.xxx.winio.jna.User32;
 import com.xxx.winio.model.Callback;
 import com.xxx.winio.model.PbcPass;
+import com.xxx.winio.model.WindowInfo;
 import com.xxx.winio.network.HttpUtil;
 import com.xxx.winio.utils.KeyBoardUtil;
 import com.xxx.winio.utils.Logger;
@@ -17,8 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.sun.jna.platform.win32.WinUser.*;
-import static com.xxx.winio.config.Config.DEV_EDIT;
-import static com.xxx.winio.config.Config.IE_EDIT;
 
 public class PbcService {
 
@@ -79,30 +78,31 @@ public class PbcService {
         hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, "#32770", null);
         hwnd = User32.INSTANCE.FindWindowEx(hwnd, null, "WTL_SplitterWindow", null);
 
+        final List<WindowInfo> list = new ArrayList<WindowInfo>();
         User32.INSTANCE.EnumChildWindows(hwnd, new WinUser.WNDENUMPROC() {
             public boolean callback(WinDef.HWND hWnd, Pointer data) {
                 String addr = hWnd.getPointer().toString().toUpperCase();
-                char[] chars = new char[200];
-                User32.INSTANCE.GetClassName(hWnd, chars, 200);
+                char[] chars = new char[20];
+                User32.INSTANCE.GetClassName(hWnd, chars, 20);
                 String cn = new String(chars).trim();
 
-//                if (cn.equals("#32770")) {
-                    System.out.print(cn);
-                    RECT rect = new RECT();
-                    User32.INSTANCE.GetWindowRect(hWnd, rect);
-                    System.out.print(rect.toString());
-                    System.out.println(addr);
-//                }
+//                System.out.print(cn);
+//                System.out.println(addr);
 
-                if (addr.contains(DEV_EDIT)) {
-                    Logger.i("Found Out IE Dev Window :" + hWnd.getPointer());
-                    User32.INSTANCE.SetFocus(hWnd);
-                    User32.INSTANCE.ShowWindow(hWnd, SW_NORMAL);        // SW_RESTORE
-                    User32.INSTANCE.SetForegroundWindow(hWnd);   // bring to front
+                WindowInfo info = new WindowInfo(hWnd, cn);
+                list.add(info);
+
+                if ("SysTreeView32".equals(cn)) {
+                    WindowInfo edit = list.get(list.size() - 6);
+                    WinDef.HWND editHwnd = edit.gethWnd();
+                    Logger.i("Found Out IE Dev Window :" + editHwnd.getPointer());
+                    User32.INSTANCE.SetFocus(editHwnd);
+                    User32.INSTANCE.ShowWindow(editHwnd, SW_NORMAL);        // SW_RESTORE
+                    User32.INSTANCE.SetForegroundWindow(editHwnd);   // bring to front
                     if (callback != null) {
-                        callback.callback(root, hWnd);
+                        callback.callback(root, editHwnd);
                     }
-                    return true;
+                    return false;
                 }
                 return true;
             }
@@ -158,5 +158,7 @@ public class PbcService {
     public static void main(String[] args) {
         final PbcService pbcService = new PbcService();
         pbcService.showIEDevelopTool(null);
+        KeyBoardUtil.sendVirtualString("aaa");
+        KeyBoardUtil.sendVK(13);
     }
 }

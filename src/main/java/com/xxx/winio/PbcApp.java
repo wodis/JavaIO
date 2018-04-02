@@ -26,30 +26,30 @@ public class PbcApp {
         BREAK = false;
         int sleepTimes = 0;
         final PbcService pbc = new PbcService();
-        while (true){
+        while (true) {
             List<PbcPass> list = pbc.listPassSrc();
-            if (list.size() > 0){
+            if (list.size() > 0) {
                 loop(pbc, list);
                 sleepTimes = 0;
             } else {
-                sleepTimes ++;
+                sleepTimes++;
                 Logger.i("No Data...");
-                if (sleepTimes < 6){
-                    Util.sleep(1 * 1000);
-                } else {
+                if (sleepTimes < 6) {
                     Util.sleep(1000);
+                } else {
+                    Util.sleep(10 * 1000);
                     sleepTimes = 0;
                 }
             }
 
-            if (!RUN){
+            if (!RUN) {
                 BREAK = true;
                 break;
             }
         }
     }
 
-    private static void loop(final PbcService pbc , List<PbcPass> list){
+    private static void loop(final PbcService pbc, List<PbcPass> list) {
         for (final PbcPass pbcPass : list) {
             pbc.showIEBrowser(new Callback() {
                 public boolean callback(WinDef.HWND root, WinDef.HWND current) {
