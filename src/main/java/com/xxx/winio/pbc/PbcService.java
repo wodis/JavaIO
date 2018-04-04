@@ -6,6 +6,7 @@ import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinUser;
 import com.xxx.winio.config.Config;
+import com.xxx.winio.jna.DDRobotUtil;
 import com.xxx.winio.jna.User32;
 import com.xxx.winio.model.Callback;
 import com.xxx.winio.model.PbcPass;
@@ -124,6 +125,17 @@ public class PbcService {
         }
     }
 
+    public void inputPasswordDD(String s){
+        if (s.length() > 20){
+            Logger.e("Password Length is more than 20. It will be 0.");
+            s = "0";
+        } else {
+            Logger.i("Input Password DD:" + s);
+        }
+        DDRobotUtil.delete(20);
+        DDRobotUtil.input(s);
+    }
+
     /**
      * 获取密码原文
      *
@@ -155,10 +167,13 @@ public class PbcService {
         return list;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         final PbcService pbcService = new PbcService();
-        pbcService.showIEDevelopTool(null);
-        KeyBoardUtil.sendVirtualString("aaa");
-        KeyBoardUtil.sendVK(13);
+//        pbcService.showIEDevelopTool(null);
+//        KeyBoardUtil.sendVirtualString("aaa");
+//        KeyBoardUtil.sendVK(13);
+        pbcService.showIEBrowser(null);
+//        pbcService.inputPassword("0123");
+        pbcService.inputPasswordDD("Kf123456");
     }
 }

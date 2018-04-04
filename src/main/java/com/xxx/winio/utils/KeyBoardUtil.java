@@ -27,8 +27,9 @@ public class KeyBoardUtil {
     public static void delete(int length) throws Exception {
         for (int i = 0; i < length; i++) {
             KeyPress(VKMapping.toScanCode("Backspace"));
+            Util.sleep(100);
         }
-        Util.sleep(1000);
+//        Util.sleep(1000);
     }
 
     /**

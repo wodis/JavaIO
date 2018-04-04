@@ -56,7 +56,7 @@ public class PbcApp {
                     //ie 打开后输入密码
                     Util.sleep(Config.WINDOW_WAIT_TIME);
                     String passSrc = pbcPass.getPassSrc();
-                    pbc.inputPassword(passSrc);
+                    pbc.inputPasswordDD(passSrc);
 //                    User32.INSTANCE.ShowWindow(root, SW_MINIMIZE);
                     //打开控制台
                     pbc.showIEDevelopTool(new Callback() {
