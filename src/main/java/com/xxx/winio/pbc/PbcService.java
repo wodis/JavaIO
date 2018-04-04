@@ -125,8 +125,8 @@ public class PbcService {
         }
     }
 
-    public void inputPasswordDD(String s){
-        if (s.length() > 20){
+    public void inputPasswordDD(String s) {
+        if (s.length() > 20) {
             Logger.e("Password Length is more than 20. It will be 0.");
             s = "0";
         } else {
@@ -144,7 +144,7 @@ public class PbcService {
     public List<PbcPass> listPassSrc() {
         List<PbcPass> list = new ArrayList<PbcPass>();
         try {
-            String result = HttpUtil.get(Config.API_LIST);
+            String result = HttpUtil.get(String.format(Config.API_LIST, Config.PC_DESC));
             if (result != null) {
                 JSONObject object = JSON.parseObject(result);
                 if (!object.containsKey("code")) {
@@ -172,8 +172,10 @@ public class PbcService {
 //        pbcService.showIEDevelopTool(null);
 //        KeyBoardUtil.sendVirtualString("aaa");
 //        KeyBoardUtil.sendVK(13);
-        pbcService.showIEBrowser(null);
-//        pbcService.inputPassword("0123");
-        pbcService.inputPasswordDD("Kf123456");
+//        pbcService.showIEBrowser(null);
+////        pbcService.inputPassword("0123");
+//        pbcService.inputPasswordDD("Kf123456");
+
+        System.out.println(String.format(Config.API_LIST, Config.PC_DESC));
     }
 }

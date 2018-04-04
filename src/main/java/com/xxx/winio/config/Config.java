@@ -14,7 +14,7 @@ public class Config {
     public static long INPUT_UP_WAIT_TIME = 300;
     public static long INPUT_VIRTUAL_WAIT_TIME = 0;
 
-    public static final String API_LIST = "https://loannode.renrendai.com/credit/list";
+    public static final String API_LIST = "https://loannode.renrendai.com/credit/list?desc=%s";
 
     public static final String JS_SETSK = "pgeditor.pwdSetSk(\"%s\");";
     public static final String JS_ID = "var id=%s;";
